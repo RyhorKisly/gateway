@@ -1,0 +1,30 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+#          URL-адрес сервера аутентификации, который выступает в роли издателя токенов
+          issuer-uri: ${keycloak.url-auth}/realms/${keycloak.realm}
+#         URL-адрес открытых ключей, используемых для проверки подписей JWT (JSON Web Tokens), получаемых от keycloak.
+          jwk-set-uri: ${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/certs
+
+server:
+  port: 8080
+
+jwt:
+  auth:
+    converter:
+      resource-id: ${keycloak.client-id}
+      principle-attribute: preferred_username
+
+keycloak:
+  realm: bies_s
+  client-id: bies_s_rest_api
+  client-secret: wQBDhfQY7doMpYNhKNOBsbhSrIbRI2fP
+  url-auth: http://keycloak:8080
+
+
+
+
+
+

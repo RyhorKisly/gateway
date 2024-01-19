@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "dcb7d8fa-21af-47da-a8d2-6d35f8a486bd",
+		"name": "user-servcie",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26695165",
+		"_collection_link": "https://blue-astronaut-753448.postman.co/workspace/GateWay~1c12678a-0a6b-4f2b-aa8a-953fa8266757/collection/26695165-dcb7d8fa-21af-47da-a8d2-6d35f8a486bd?action=share&source=collection_link&creator=26695165"
+	},
+	"item": [
+		{
+			"name": "8080/auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"admin\",\n    \"password\": \"123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8080/users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"login\": \"test11\",\n    \"email\": \"test1@test.test\",\n    \"password\": \"123\",\n    \"fio\": \"Кислый Григорий Дмитриевич\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8080/users",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJYdFYwWllpREgwMDFJdkx5S3hYVy0tc1M1VWtMdHBuVGJKUWl6djZ6VFN3In0.eyJleHAiOjE3MDU2ODU5MzQsImlhdCI6MTcwNTY4NDEzNCwianRpIjoiYzQxZjI3M2YtY2EwNC00YjY0LWI1NjAtNzg1OTY2YzNlMjY3IiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL2JpZXNfcyIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI5ZTkxODA5Yy1hMTE0LTQ4ZDEtOGM1NC00MTFiNDk2ZjNiYTQiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJiaWVzX3NfcmVzdF9hcGkiLCJzZXNzaW9uX3N0YXRlIjoiZGVlOGI4ZGItYTkxYS00NmI4LTk4M2ItZWFjZDg4NGIzNGMyIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vdXNlci1zZXJ2aWNlOjgwODAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtYmllc19zIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImJpZXNfc19yZXN0X2FwaSI6eyJyb2xlcyI6WyJBRE1JTiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJlbWFpbCBwcm9maWxlIiwic2lkIjoiZGVlOGI4ZGItYTkxYS00NmI4LTk4M2ItZWFjZDg4NGIzNGMyIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJ0ZXN0dGVzdCJ9.OQkgOuDZk3RmgAXhkU3jXiRw5LraI0-NboZQ80QObfFRTPUIwB9EDRrJbQpRigTAUIzKfdpIE9hSEmMKrjO7rg4FsaVaZPoejour4F2l_d58sS7NuBFANH5dOJdLx6MUsrbggaxK3jmgkD0LNy7bHsBMe3WdlXn0dzhQdWjjoJ0F7IIvDrVhfuZUnJaM-0yOKk8BRbSs8xHlzzu-kmXUjPrqkNcJhFbvpUFUSZb85gTaM4W8Ne_Xms6_9gc8V_RY7qfuXy2GyBdbTLR0oTDHkqOPO6QZq808UvIJX0G4CjOuPq1VeEcRbT9JlCdM86qZG-ThwulRMpZi0vcC_3-miA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "8080/token/refresh",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmODU0ZGQzZC0zMWFmLTQ2MDUtOWFmOC0yZmNmYzVkNmZhMzUifQ.eyJleHAiOjE3MDU2NjUwMDAsImlhdCI6MTcwNTY2MTQwMCwianRpIjoiMWNjOGQwMDMtZGI0NS00ZDBkLThmMDgtZmU3Y2Y0OTU0Y2ZmIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL2JpZXNfcyIsImF1ZCI6Imh0dHA6Ly9rZXljbG9hazo4MDgwL3JlYWxtcy9iaWVzX3MiLCJzdWIiOiI4ZGNhZTBjNS1kMDkxLTRkYWUtOTJkYS1hNjU3Nzg5MTMxNjYiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoiYmllc19zX3Jlc3RfYXBpIiwic2Vzc2lvbl9zdGF0ZSI6IjNmZGRkNDc3LWZjMTUtNDNlMC04N2E0LTQyZDBjMmIyYjZhYiIsInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsInNpZCI6IjNmZGRkNDc3LWZjMTUtNDNlMC04N2E0LTQyZDBjMmIyYjZhYiJ9.UH-jT2qNhYjngWjACBrBTWs9zo-SCW-stph6FdNLVIE\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/token/refresh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"token",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

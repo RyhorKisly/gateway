@@ -1,0 +1,16 @@
+management:
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
+#server
+server:
+  port: 8081
+
+# Paths
+path:
+  user-service-domain: http://localhost:8080
+  idea-service-domain: http://localhost:8083
+
+# Keycloak
+keycloak:
+  url-auth: http://localhost:8484

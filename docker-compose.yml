@@ -1,0 +1,88 @@
+version: '3.5'
+
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  keycloak-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: keycloak_bies_s
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    restart: unless-stopped
+    networks:
+      - gateway_example_ntwrks
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.1
+    command: -v start-dev --import-realm
+    container_name: keycloak
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-db
+      DB_DATABASE: keycloak_bies_s
+      DB_USER: ${POSTGRES_USER:-postgres}
+      DB_SCHEMA: public
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    volumes:
+      - ./user-service/keycloak:/opt/keycloak/data/import
+    ports:
+      - "8484:8080"
+    depends_on:
+      - keycloak-db
+    links:
+      - "keycloak-db:keycloak-db"
+    networks:
+      - gateway_example_ntwrks
+
+  user-service:
+    container_name: user-service
+    build: user-service
+    image: bies_s_user-service:1.0.19
+    restart: always
+#    volumes:
+#      - 'log-volume:/usr/src/userservice/logs'
+    ports:
+      - "8080:8080"
+    networks:
+      - gateway_example_ntwrks
+
+  gateway-mvc-service:
+    container_name: gateway-mvc-service
+    build: gateway-mvc-service
+    image: gateway-mvc-service:1.0.0
+    restart: always
+    ports:
+      - "8081:8080"
+    networks:
+      - gateway_example_ntwrks
+
+  gateway-reactive-service:
+    container_name: gateway-reactive-service
+    build: gateway-reactive-service
+    image: gateway-reactive-service:1.0.5
+    restart: always
+    ports:
+      - "8082:8080"
+    networks:
+      - gateway_example_ntwrks
+
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    environment:
+      - STORAGE_TYPE=mem
+    ports:
+      - "9411:9411"
+    networks:
+      - gateway_example_ntwrks
+
+networks:
+  gateway_example_ntwrks:
+    name: gateway_example
