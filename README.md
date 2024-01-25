@@ -41,7 +41,7 @@
 11. После аутентификации в headers скопируйте token и в постмане добавьте его в поле хедера "Authorization" - "Bearer token";
 12. К проекту прикреплены коллекции для Postman в папке postman-collections.
 13. При необходимости запустить сервисы (user-servcie, gateway-mvc-service, gateway-reactive-service) локально, введите profile: local
-Порты: 
+Порты:  
 - user-service: 8080;
 - через mvc-gateway:8081;
 - через reactive-gateway:8082.
