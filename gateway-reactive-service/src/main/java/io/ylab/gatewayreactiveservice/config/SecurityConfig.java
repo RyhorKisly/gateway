@@ -1,12 +1,12 @@
 package io.ylab.gatewayreactiveservice.config;
 
+import io.ylab.gatewayreactiveservice.config.utils.JwtAuthConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -25,6 +25,8 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class SecurityConfig {
 
+    private final JwtAuthConverter jwtAuthConverter;
+
     /**
      * Configures the security settings for the WebFlux application.
      *
@@ -42,14 +44,13 @@ public class SecurityConfig {
                         .pathMatchers(HttpMethod.POST, "/api/v1/token/refresh").permitAll()
                         .anyExchange().authenticated()
                 )
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(Customizer.withDefaults()))
+                .oauth2ResourceServer(oAuth2 -> oAuth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthConverter)))
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .authenticationEntryPoint(authenticationEntryPoint())
                         .accessDeniedHandler(accessDeniedHandler())
                 )
                 .build();
     }
-
 
     /**
      * Configures the authentication entry point for unauthorized requests.
