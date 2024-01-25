@@ -1,27 +1,24 @@
 package io.ylab.gatewayreactiveservice.filters;
 
+import io.ylab.gatewayreactiveservice.config.properties.AppProperties;
+import io.ylab.gatewayreactiveservice.core.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.*;
-
 /**
- * Global filter responsible for extracting user roles from the JWT token and adding them as a header to the request.
+ * Global filter responsible for extracting user roles from the SecurityContext and adding them as a header to the request.
  */
 @Component
 @RequiredArgsConstructor
 public class UserRoleFilter implements GlobalFilter {
-    @Value("${jwt.auth.converter.resource-id}")
-    private String resourceId;
-    private final ReactiveJwtDecoder jwtDecoder;
+    private final AppProperties properties;
 
     /**
      * Filters requests to extract user roles from the JWT token and adds them as a header to the request.
@@ -32,31 +29,12 @@ public class UserRoleFilter implements GlobalFilter {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        String header = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (header == null || !header.startsWith("Bearer ")) {
-            return chain.filter(exchange);
-        }
-
-        final String token = header.split(" ")[1].trim();
-
-        return jwtDecoder.decode(token)
-                .flatMap(jwt -> extractRole(jwt)
-                                .map(role -> exchange.getRequest().mutate().header("User-Role", role).build())
-                                .map(request -> chain.filter(exchange.mutate().request(request).build()))
-                                .orElseGet(() -> chain.filter(exchange)));
-    }
-
-
-    /**
-     * Extracts user role from the provided JWT token.
-     *
-     * @param jwt The {@link Jwt} token from which roles are extracted.
-     * @return An {@link Optional} containing the extracted role, or empty if not found.
-     */
-    private Optional<String> extractRole(Jwt jwt) {
-        return Optional.ofNullable(jwt.getClaimAsMap("resource_access"))
-                .map(resourceAccess -> (Map<String, List<String>>) resourceAccess.get(resourceId))
-                .map(clientAccess -> clientAccess.get("roles"))
-                .flatMap(roles -> roles.stream().findFirst());
+        return ReactiveSecurityContextHolder.getContext()
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getDetails)
+                .switchIfEmpty(chain.filter(exchange))
+                .cast(UserDTO.class)
+                .map(dto -> exchange.getRequest().mutate().header(properties.getRoleHeader(), dto.role()).build())
+                .flatMap(request -> chain.filter(exchange));
     }
 }

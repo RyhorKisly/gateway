@@ -65,6 +65,11 @@ path:
   user-service-domain: http://user-service:8080
   idea-service-domain: http://idea-service:8080
 
+#App
+app:
+  id-header: X-User-Id
+  role-header: X-User-Role
+
 # Debug
 logging:
   level:
